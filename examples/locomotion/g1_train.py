@@ -58,44 +58,67 @@ def get_train_cfg(exp_name, max_iterations):
 
 def get_cfgs():
     env_cfg = {
+        # "num_actions": 23,
         "num_actions": 12,
         # joint/link names
         "default_joint_angles": {  # [rad]
-            "FL_hip_joint": 0.0,
-            "FR_hip_joint": 0.0,
-            "RL_hip_joint": 0.0,
-            "RR_hip_joint": 0.0,
-            "FL_thigh_joint": 0.8,
-            "FR_thigh_joint": 0.8,
-            "RL_thigh_joint": 1.0,
-            "RR_thigh_joint": 1.0,
-            "FL_calf_joint": -1.5,
-            "FR_calf_joint": -1.5,
-            "RL_calf_joint": -1.5,
-            "RR_calf_joint": -1.5,
+            "left_hip_pitch_joint": -0.20,
+            "left_hip_roll_joint": 0.0,
+            "left_hip_yaw_joint": 0.0,
+            "left_knee_joint": 0.42,
+            "left_ankle_pitch_joint": -0.23,
+            "left_ankle_roll_joint": 0.0,
+            "right_hip_pitch_joint": -0.20,
+            "right_hip_roll_joint": 0.0,
+            "right_hip_yaw_joint": 0.0,
+            "right_knee_joint": 0.42,
+            "right_ankle_pitch_joint": -0.23,
+            "right_ankle_roll_joint": 0.0,
+            # "waist_yaw_joint": 0.0,
+            # "left_shoulder_pitch_joint": 0.35,
+            # "left_shoulder_roll_joint": 0.16,
+            # "left_shoulder_yaw_joint": 0.0,
+            # "left_elbow_joint": 0.0,
+            # "left_wrist_roll_joint": 0.0,
+            # "right_shoulder_pitch_joint": 0.35,
+            # "right_shoulder_roll_joint": -0.16,
+            # "right_shoulder_yaw_joint": 0.0,
+            # "right_elbow_joint": 0.0,
+            # "right_wrist_roll_joint": 0.0,
         },
         "dof_names": [
-            "FR_hip_joint",
-            "FR_thigh_joint",
-            "FR_calf_joint",
-            "FL_hip_joint",
-            "FL_thigh_joint",
-            "FL_calf_joint",
-            "RR_hip_joint",
-            "RR_thigh_joint",
-            "RR_calf_joint",
-            "RL_hip_joint",
-            "RL_thigh_joint",
-            "RL_calf_joint",
+            "left_hip_pitch_joint",
+            "left_hip_roll_joint",
+            "left_hip_yaw_joint",
+            "left_knee_joint",
+            "left_ankle_pitch_joint",
+            "left_ankle_roll_joint",
+            "right_hip_pitch_joint",
+            "right_hip_roll_joint",
+            "right_hip_yaw_joint",
+            "right_knee_joint",
+            "right_ankle_pitch_joint",
+            "right_ankle_roll_joint",
+            # "waist_yaw_joint",
+            # "left_shoulder_pitch_joint",
+            # "left_shoulder_roll_joint",
+            # "left_shoulder_yaw_joint",
+            # "left_elbow_joint",
+            # "left_wrist_roll_joint",
+            # "right_shoulder_pitch_joint",
+            # "right_shoulder_roll_joint",
+            # "right_shoulder_yaw_joint",
+            # "right_elbow_joint",
+            # "right_wrist_roll_joint",
         ],
         # PD
-        "kp": 20.0,
-        "kd": 0.5,
+        "kp": 100.0,
+        "kd": 5.0,
         # termination
-        "termination_if_roll_greater_than": 10,  # degree
-        "termination_if_pitch_greater_than": 10,
+        "termination_if_roll_greater_than": 40,  # degree
+        "termination_if_pitch_greater_than": 40,
         # base pose
-        "base_init_pos": [0.0, 0.0, 0.42],
+        "base_init_pos": [0.0, 0.0, 0.74],
         "base_init_quat": [1.0, 0.0, 0.0, 0.0],
         "episode_length_s": 20.0,
         "resampling_time_s": 4.0,
@@ -104,6 +127,7 @@ def get_cfgs():
         "clip_actions": 100.0,
     }
     obs_cfg = {
+        # "num_obs": 78,
         "num_obs": 45,
         "obs_scales": {
             "lin_vel": 2.0,
@@ -137,9 +161,9 @@ def get_cfgs():
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--exp_name", type=str, default="go2-walking")
+    parser.add_argument("-e", "--exp_name", type=str, default="g1-walking")
     parser.add_argument("-B", "--num_envs", type=int, default=4096)
-    parser.add_argument("--max_iterations", type=int, default=100)
+    parser.add_argument("--max_iterations", type=int, default=1500)
     args = parser.parse_args()
 
     gs.init(logging_level="warning")

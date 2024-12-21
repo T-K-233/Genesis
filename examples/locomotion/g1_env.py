@@ -57,10 +57,15 @@ class G1Env:
         self.base_init_quat = torch.tensor(self.env_cfg["base_init_quat"], device=self.device)
         self.inv_base_init_quat = inv_quat(self.base_init_quat)
         self.robot = self.scene.add_entity(
-            gs.morphs.MJCF(
-                file="urdf/g1/g1_23dof.xml",
-                # pos=self.base_init_pos.cpu().numpy(),
-                # quat=self.base_init_quat.cpu().numpy(),
+            # gs.morphs.MJCF(
+            #     file="genesis/assets/xml/g1/g1_23dof.xml",
+            #     pos=self.base_init_pos.cpu().numpy(),
+            #     quat=self.base_init_quat.cpu().numpy(),
+            # ),
+            gs.morphs.URDF(
+                file="genesis/assets/urdf/g1/urdf/g1_12dof.urdf",
+                pos=self.base_init_pos.cpu().numpy(),
+                quat=self.base_init_quat.cpu().numpy(),
             ),
         )
 
