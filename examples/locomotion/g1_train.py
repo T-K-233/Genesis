@@ -112,7 +112,7 @@ def get_cfgs():
             # "right_wrist_roll_joint",
         ],
         # PD
-        "kp": 100.0,
+        "kp": 150.0,
         "kd": 5.0,
         # termination
         "termination_if_roll_greater_than": 40,  # degree
@@ -137,14 +137,17 @@ def get_cfgs():
         },
     }
     reward_cfg = {
-        "tracking_sigma": 0.25,
+        "track_lin_vel_xy_exp_std": 0.25,
+        "track_ang_vel_z_exp_std": 0.5,
         "base_height_target": 0.3,
         "feet_height_target": 0.075,
         "reward_scales": {
-            "tracking_lin_vel": 1.0,
-            "tracking_ang_vel": 0.2,
-            "lin_vel_z": -1.0,
-            "base_height": -50.0,
+            "termination": -200.0,
+            "track_lin_vel_xy_exp": 1.0,
+            "track_ang_vel_z_exp": 2.0,
+            # "feet_air_time": -1.0,
+            # "feet_slide": -1.0,
+            "dof_pos_limits": -0.1,
             "action_rate": -0.005,
             "similar_to_default": -0.1,
         },

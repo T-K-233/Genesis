@@ -67,6 +67,7 @@ class G1Env:
                 pos=self.base_init_pos.cpu().numpy(),
                 quat=self.base_init_quat.cpu().numpy(),
             ),
+            visualize_contact=True,
         )
 
         # build
@@ -238,19 +239,27 @@ class G1Env:
         return self.obs_buf, None
 
     # ------------ reward functions----------------
-    def _reward_tracking_lin_vel(self):
+    def _reward_termination(self):
+        return torch.zeros_like(self.reset_buf, device=self.device, dtype=gs.tc_float)
+
+    def _reward_track_lin_vel_xy_exp(self):
         # Tracking of linear velocity commands (xy axes)
         lin_vel_error = torch.sum(torch.square(self.commands[:, :2] - self.base_lin_vel[:, :2]), dim=1)
-        return torch.exp(-lin_vel_error / self.reward_cfg["tracking_sigma"])
+        return torch.exp(-lin_vel_error / self.reward_cfg["track_lin_vel_xy_exp_std"])
 
-    def _reward_tracking_ang_vel(self):
+    def _reward_track_ang_vel_z_exp(self):
         # Tracking of angular velocity commands (yaw)
         ang_vel_error = torch.square(self.commands[:, 2] - self.base_ang_vel[:, 2])
-        return torch.exp(-ang_vel_error / self.reward_cfg["tracking_sigma"])
+        return torch.exp(-ang_vel_error / self.reward_cfg["track_ang_vel_z_exp_std"])
 
-    def _reward_lin_vel_z(self):
-        # Penalize z axis base linear velocity
-        return torch.square(self.base_lin_vel[:, 2])
+    def _reward_dof_pos_limits(self):
+        # Penalize joint poses that is out of 0.9 soft limits
+        upper_limits, lower_limits = self.robot.get_dofs_limit(self.motor_dofs)
+        upper_limits *= 0.9
+        lower_limits *= 0.9
+        out_of_limits = -(self.dof_pos - upper_limits).clip(max=0.0)
+        out_of_limits += (self.dof_pos - lower_limits).clip(min=0.0)
+        return torch.sum(out_of_limits, dim=1)
 
     def _reward_action_rate(self):
         # Penalize changes in actions

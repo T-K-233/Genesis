@@ -1,6 +1,7 @@
 import argparse
 import os
 import pickle
+import time
 
 import torch
 from g1_env import G1Env
@@ -19,6 +20,11 @@ def main():
 
     log_dir = f"logs/{args.exp_name}"
     env_cfg, obs_cfg, reward_cfg, command_cfg, train_cfg = pickle.load(open(f"logs/{args.exp_name}/cfgs.pkl", "rb"))
+    
+    # from g1_train import get_cfgs, get_train_cfg
+    # env_cfg, obs_cfg, reward_cfg, command_cfg = get_cfgs()
+    # train_cfg = get_train_cfg(args.exp_name, 100)
+
     reward_cfg["reward_scales"] = {}
 
     env = G1Env(
@@ -39,7 +45,9 @@ def main():
     with torch.no_grad():
         while True:
             actions = policy(obs)
+            # actions[:] = 0.0
             obs, _, rews, dones, infos = env.step(actions)
+            time.sleep(0.2)
 
 
 if __name__ == "__main__":

@@ -29,8 +29,8 @@ def get_train_cfg(exp_name, max_iterations):
         "init_member_classes": {},
         "policy": {
             "activation": "elu",
-            "actor_hidden_dims": [512, 256, 128],
-            "critic_hidden_dims": [512, 256, 128],
+            "actor_hidden_dims": [128, 128, 128],
+            "critic_hidden_dims": [128, 128, 128],
             "init_noise_std": 1.0,
         },
         "runner": {
@@ -139,7 +139,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--exp_name", type=str, default="go2-walking")
     parser.add_argument("-B", "--num_envs", type=int, default=4096)
-    parser.add_argument("--max_iterations", type=int, default=100)
+    parser.add_argument("--max_iterations", type=int, default=300)
     args = parser.parse_args()
 
     gs.init(logging_level="warning")
